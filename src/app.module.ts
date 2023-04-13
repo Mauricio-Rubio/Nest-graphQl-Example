@@ -3,22 +3,21 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { BlogModule } from './blog/blog.module';
+import { ResolverGqLResolver } from './resolver-gq-l/resolver-gq-l.resolver';
 
 @Module({
   imports: [ GraphQLModule.forRoot({
     autoSchemaFile: 'schema.gql'
   }),
   TypeOrmModule.forRoot({
-    type: 'mysql',
-    host: 'localhost',
-    port: 3306,
-    username: 'root',
-    password: 'tester',
-    database: 'test',
+    type: 'sqlite',
+    database: ':memory:',
     entities: ['dist/**/*.model.js'],
-    synchronize: false,
-  }),],
+    synchronize: true,
+  }),
+  BlogModule,],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ResolverGqLResolver],
 })
 export class AppModule {}
